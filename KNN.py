@@ -25,7 +25,7 @@ lug_boot = label_encoder.fit_transform(list(data["lug_boot"]))
 safety = label_encoder.fit_transform(list(data["safety"]))
 cls = label_encoder.fit_transform(list(data["class"]))
 
-print("\n", buying)
+# print("\n", buying)
 
 goal_feature = "class"
 
@@ -34,11 +34,21 @@ Y = list(cls)
 
 x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(X, Y, test_size=0.1)
 
-print("\n", x_train, y_train, x_test, y_test)
+# print("\n", x_train, y_train, x_test, y_test)
 
 # making a KNN model
 knn_model = KNeighborsClassifier(n_neighbors=5)
 
 knn_model.fit(x_train, y_train)
 accuracy = knn_model.score(x_test, y_test)
-print(accuracy)
+print("\n"+"Model accuracy:", accuracy)
+
+# predict the test data and compare with the real values
+predictions = knn_model.predict(x_test)
+goal_names = ['acc', 'good', 'unacc', 'vgood']
+
+print("\n"+ "Comparing predictions to real values: ","\n")
+
+for i in range(len(predictions)):
+    print("Data:", x_test[i])
+    print("Predicted class:", goal_names[predictions[i]], "  Real class:", goal_names[y_test[i]])
