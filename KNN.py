@@ -1,11 +1,9 @@
 import tensorflow
 import keras
 import pandas
-import numpy
 import sklearn
-from sklearn.utils import shuffle
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn import linear_model, preprocessing
+from sklearn import preprocessing
 
 # print("knn is real")
 
@@ -37,18 +35,21 @@ x_train, x_test, y_train, y_test = sklearn.model_selection.train_test_split(X, Y
 # print("\n", x_train, y_train, x_test, y_test)
 
 # making a KNN model
-knn_model = KNeighborsClassifier(n_neighbors=5)
+k = 9
+knn_model = KNeighborsClassifier(n_neighbors=k)
 
 knn_model.fit(x_train, y_train)
 accuracy = knn_model.score(x_test, y_test)
-print("\n"+"Model accuracy:", accuracy)
+print("\n" + "Model accuracy:", accuracy,"\n" )
 
 # predict the test data and compare with the real values
+# and showing the indices of nearest neighbors for each test node and corresponding euclidean distance
 predictions = knn_model.predict(x_test)
 goal_names = ['acc', 'good', 'unacc', 'vgood']
 
-print("\n"+ "Comparing predictions to real values: ","\n")
-
+print( "Comparing predictions with the real values and displaying neighbors of each node and corresponding distance:")
+print("\n")
 for i in range(len(predictions)):
     print("Data:", x_test[i])
-    print("Predicted class:", goal_names[predictions[i]], "  Real class:", goal_names[y_test[i]])
+    print("Neighbors:", knn_model.kneighbors([x_test[i]], k, return_distance=True))
+    print("Predicted class:", goal_names[predictions[i]], "  Real class:", goal_names[y_test[i]],"\n")
